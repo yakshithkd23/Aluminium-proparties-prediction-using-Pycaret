@@ -1,0 +1,162 @@
+# Model for UTS
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_uts, train_size=0.8, shuffle=True, random_state=2)
+
+# Initialize PyCaret regression setup for UTS
+s = setup(data=dataset, target='UTS (MPa)', verbose=True)
+
+# Compare models and choose the best
+best_model = compare_models()
+
+# Initialize Neural Network Model for UTS
+nn_model = Sequential()
+nn_model.add(Dense(units=15, activation='tanh', input_dim=X_train.shape[1]))
+nn_model.add(Dense(units=30, activation='tanh'))
+nn_model.add(Dense(units=45, activation='tanh'))
+nn_model.add(Dense(units=40, activation='tanh'))
+nn_model.add(Dense(units=30, activation='tanh'))
+nn_model.add(Dense(units=20, activation='tanh'))
+nn_model.add(Dense(units=10, activation='tanh'))
+
+nn_model.add(Dense(units=1))  # Single output for UTS
+
+nn_model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mean_squared_error'])
+
+history_uts = nn_model.fit(X_train, y_train, batch_size=5, epochs=200, verbose=0)
+
+# Predictions and Evaluation for Neural Network UTS
+y_nn_pred_uts = nn_model.predict(X_test).flatten()  # Flattening to match y_test shape
+
+# Random Forest Model for UTS
+rf_model_uts = RandomForestRegressor(n_estimators=100)
+rf_model_uts.fit(X_train, y_train)
+y_rf_pred_uts = rf_model_uts.predict(X_test)
+
+# Evaluate UTS models
+r2_nn_uts, mae_nn_uts = evaluate_model(y_test, y_nn_pred_uts, "Neural Network")
+results['Model'].append('Neural Network UTS')
+results['R²'].append(r2_nn_uts)
+results['MAE'].append(mae_nn_uts)
+
+r2_rf_uts, mae_rf_uts = evaluate_model(y_test, y_rf_pred_uts, "Random Forest")
+results['Model'].append('Random Forest UTS')
+results['R²'].append(r2_rf_uts)
+results['MAE'].append(mae_rf_uts)
+
+# Visualization of Predictions vs True Values for UTS
+plt.figure(figsize=(12, 6))
+plt.scatter(y_test, y_nn_pred_uts, color='blue', label='NN Predictions', alpha=0.7)
+plt.scatter(y_test, y_rf_pred_uts, color='red', label='RF Predictions', alpha=0.7)
+plt.plot(y_test, y_test, color='black', linestyle='--')
+plt.title('UTS Predictions vs True Values')
+plt.xlabel('True Values')
+plt.ylabel('Predictions')
+plt.legend()
+plt.show()
+
+# Model for Elongation
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_elongation, train_size=0.8, shuffle=True, random_state=2)
+
+# Initialize PyCaret regression setup for Elongation
+s = setup(data=dataset, target='Elongation (%)', verbose=True)
+
+# Compare models and choose the best
+best_model_elongation = compare_models()
+
+# Initialize Neural Network Model for Elongation
+nn_model_elongation = Sequential()
+nn_model_elongation.add(Dense(units=15, activation='tanh', input_dim=X_train.shape[1]))
+nn_model_elongation.add(Dense(units=30, activation='tanh'))
+nn_model_elongation.add(Dense(units=45, activation='tanh'))
+nn_model_elongation.add(Dense(units=40, activation='tanh'))
+nn_model_elongation.add(Dense(units=30, activation='tanh'))
+nn_model_elongation.add(Dense(units=20, activation='tanh'))
+nn_model_elongation.add(Dense(units=10, activation='tanh'))
+nn_model_elongation.add(Dense(units=1))  # Single output for Elongation
+
+nn_model_elongation.compile(optimizer='adam', loss='mean_squared_error', metrics=['mean_squared_error'])
+
+history_elongation = nn_model_elongation.fit(X_train, y_train, batch_size=5, epochs=200, verbose=0)
+
+# Predictions and Evaluation for Neural Network Elongation
+y_nn_pred_elongation = nn_model_elongation.predict(X_test).flatten()
+
+# Random Forest Model for Elongation
+rf_model_elongation = RandomForestRegressor(n_estimators=100)
+rf_model_elongation.fit(X_train, y_train)
+y_rf_pred_elongation = rf_model_elongation.predict(X_test)
+
+# Evaluate Elongation models
+r2_nn_elongation, mae_nn_elongation = evaluate_model(y_test, y_nn_pred_elongation, "Neural Network")
+results['Model'].append('Neural Network Elongation')
+results['R²'].append(r2_nn_elongation)
+results['MAE'].append(mae_nn_elongation)
+
+r2_rf_elongation, mae_rf_elongation = evaluate_model(y_test, y_rf_pred_elongation, "Random Forest")
+results['Model'].append('Random Forest Elongation')
+results['R²'].append(r2_rf_elongation)
+results['MAE'].append(mae_rf_elongation)
+
+# Visualization of Predictions vs True Values for Elongation
+plt.figure(figsize=(12, 6))
+plt.scatter(y_test, y_nn_pred_elongation, color='blue', label='NN Predictions', alpha=0.7)
+plt.scatter(y_test, y_rf_pred_elongation, color='red', label='RF Predictions', alpha=0.7)
+plt.plot(y_test, y_test, color='black', linestyle='--')
+plt.title('Elongation Predictions vs True Values')
+plt.xlabel('True Values')
+plt.ylabel('Predictions')
+plt.legend()
+plt.show()
+
+# Model for Conductivity
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_conductivity, train_size=0.8, shuffle=True, random_state=2)
+
+# Initialize PyCaret regression setup for Conductivity
+s = setup(data=dataset, target='Conductivity (%IACS)', verbose=True)
+
+# Compare models and choose the best
+best_model_conductivity = compare_models()
+
+# Initialize Neural Network Model for Conductivity
+nn_model_conductivity = Sequential()
+nn_model_conductivity.add(Dense(units=15, activation='tanh', input_dim=X_train.shape[1]))
+nn_model_conductivity.add(Dense(units=30, activation='tanh'))
+nn_model_conductivity.add(Dense(units=45, activation='tanh'))
+nn_model_conductivity.add(Dense(units=40, activation='tanh'))
+nn_model_conductivity.add(Dense(units=30, activation='tanh'))
+nn_model_conductivity.add(Dense(units=20, activation='tanh'))
+nn_model_conductivity.add(Dense(units=10, activation='tanh'))
+nn_model_conductivity.add(Dense(units=1))  # Single output for Conductivity
+
+nn_model_conductivity.compile(optimizer='adam', loss='mean_squared_error', metrics=['mean_squared_error'])
+
+history_conductivity = nn_model_conductivity.fit(X_train, y_train, batch_size=5, epochs=200, verbose=0)
+
+# Predictions and Evaluation for Neural Network Conductivity
+y_nn_pred_conductivity = nn_model_conductivity.predict(X_test).flatten()  # Flattening to match y_test shape
+
+# Random Forest Model for Conductivity
+rf_model_conductivity = RandomForestRegressor(n_estimators=100)
+rf_model_conductivity.fit(X_train, y_train)
+y_rf_pred_conductivity = rf_model_conductivity.predict(X_test)
+
+# Evaluate Conductivity models
+r2_nn_conductivity, mae_nn_conductivity = evaluate_model(y_test, y_nn_pred_conductivity, "Neural Network")
+results['Model'].append('Neural Network Conductivity')
+results['R²'].append(r2_nn_conductivity)
+results['MAE'].append(mae_nn_conductivity)
+
+r2_rf_conductivity, mae_rf_conductivity = evaluate_model(y_test, y_rf_pred_conductivity, "Random Forest")
+results['Model'].append('Random Forest Conductivity')
+results['R²'].append(r2_rf_conductivity)
+results['MAE'].append(mae_rf_conductivity)
+
+# Visualization of Predictions vs True Values for Conductivity
+plt.figure(figsize=(12, 6))
+plt.scatter(y_test, y_nn_pred_conductivity, color='blue', label='NN Predictions', alpha=0.7)
+plt.scatter(y_test, y_rf_pred_conductivity, color='red', label='RF Predictions', alpha=0.7)
+plt.plot(y_test, y_test, color='black', linestyle='--')
+plt.title('Conductivity Predictions vs True Values')
+plt.xlabel('True Values')
+plt.ylabel('Predictions')
+plt.legend()
+plt.show()
